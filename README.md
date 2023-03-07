@@ -1,8 +1,9 @@
 ```
+├── .gitignore         <- datasetフォルダやmodelsフォルダを追跡したくない場合記述．
 ├── LICENSE
 ├── Makefile           <- `make data` や `make train`のようなコマンドをここに記述．
 ├── README.md          <- このプロジェクトの説明
-├── data
+├── dataset
 │   ├── external       <- 第三者が作成したデータ
 │   ├── interim        <- 何かしらの変換をした中間データ
 │   ├── processed      <- モデルに入力する最終的なデータ
