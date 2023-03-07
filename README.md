@@ -1,3 +1,8 @@
+# 機械学習のコード運用におけるテンプレート
+
+https://github.com/drivendata/cookiecutter-data-science
+を参考に作成．
+
 ```
 ├── .gitignore         <- datasetフォルダやmodelsフォルダを追跡したくない場合記述．
 ├── LICENSE
@@ -43,3 +48,4 @@
 │
 └── tox.ini            <- 設定を記述するファイル．詳細:tox.testrun.or
 ```
+
