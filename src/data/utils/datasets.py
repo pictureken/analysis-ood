@@ -199,6 +199,63 @@ class TestTimeAugTinyImageNet(TestTimeAugCIFAR10):
             sys.exit(1)
 
 
+class TestTimeAugCIFAR10C(TestTimeAugCIFAR10):
+    base_folder = "CIFAR-10-C"
+    aug_data_name = "CIFAR10-C"
+    aug_test_name = "test_batch_aug_10"
+
+    def __init__(
+        self,
+        root: str,
+        transform_name: str,
+        corruption_name: str,
+        corruption_level: int,
+    ) -> None:
+
+        self.root = root
+        self.transform_name = transform_name
+        num_data = 10000
+
+        CORRUPTIONS = [
+            "gaussian_noise",
+            "shot_noise",
+            "impulse_noise",
+            "defocus_blur",
+            "glass_blur",
+            "motion_blur",
+            "zoom_blur",
+            "snow",
+            "frost",
+            "fog",
+            "brightness",
+            "contrast",
+            "elastic_transform",
+            "pixelate",
+            "jpeg_compression",
+        ]
+        corruption_idx = num_data * corruption_level
+        file_path = os.path.join(self.root, self.base_folder, "{}.npy")
+        self.data = np.load(file_path.format(corruption_name))[
+            corruption_idx - num_data : corruption_idx
+        ]
+
+        if self.transform_name == "flip_crop":
+            self.transform = transforms.Compose(
+                [
+                    transforms.RandomHorizontalFlip(),
+                    transforms.RandomCrop(32, padding=4),
+                ]
+            )
+        else:
+            print("存在しない画像変換手法です")
+            sys.exit(1)
+
+
 if __name__ == "__main__":
-    aug = TestTimeAugTinyImageNet(root="./dataset/external", transform_name="flip_crop")
+    aug = TestTimeAugCIFAR10C(
+        root="./dataset/external",
+        transform_name="flip_crop",
+        corruption_name="gaussian_noise",
+        corruption_level=1,
+    )
     aug.aug("./dataset/processed", aug_num=10)
