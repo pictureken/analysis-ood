@@ -5,15 +5,11 @@ import pickle
 import random
 import sys
 
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
-import torchvision
 import torchvision.transforms as transforms
 from natsort import natsorted
 from PIL import Image
-from torch.utils.data import DataLoader
-from torchvision import datasets
 from tqdm import tqdm
 
 
