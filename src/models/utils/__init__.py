@@ -1,1 +1,1 @@
-from . import data, labelnoise, resnet, trainer
+from . import cifar10, labelnoise, resnet, trainer

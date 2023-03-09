@@ -44,7 +44,7 @@ def main():
 
     # dataloader
     load_path = os.path.join(".", BASE_FOLDER, LOAD_FOLDER)
-    loader = utils.data.CIFAR10Loader(root=load_path)
+    loader = utils.cifar10.CIFAR10Loader(root=load_path)
     train_loader = loader.train(
         batch_size=args.train_batch_size,
         num_workers=args.num_workers,
