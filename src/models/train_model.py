@@ -1,9 +1,6 @@
 import argparse
 import os
 
-import torch
-import torchvision
-import torchvision.transforms as transforms
 import utils
 
 
@@ -11,13 +8,29 @@ def main():
     BASE_FOLDER = "dataset"
     LOAD_FOLDER = "raw"
     MODEL_LIST = ["ResNet18"]
+    CIFAR10_CLASSES = [
+        "airplane",
+        "automobile",
+        "bird",
+        "cat",
+        "deer",
+        "dog",
+        "frog",
+        "horse",
+        "ship",
+        "track",
+    ]
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--train-batch-size", help="", type=int, default=128)
     parser.add_argument("--test-batch-size", help="", type=int, default=100)
     parser.add_argument("--num-workers", help="", type=int, default=2)
     parser.add_argument("--noise-level", help="", type=int, default=20)
-    parser.add_argument("--model", help="", choices=MODEL_LIST)
+    parser.add_argument("--epoch", help="", type=int, default=4000)
+    parser.add_argument("--learning-late", help="", type=int, default=1e-4)
+    parser.add_argument("--gpu-device", help="", type=str, default="cuda:0")
+    parser.add_argument("--model", help="", choices=MODEL_LIST, default="ResNet18")
+    parser.add_argument("--model-size", help="", type=int, default=64)
     args = parser.parse_args()
 
     # dataloader
@@ -31,6 +44,17 @@ def main():
     test_loader = loader.test(
         batch_size=args.test_batch_size, num_workers=args.num_workers
     )
+
+    trainer = utils.trainer.TrainModel(
+        lr=args.learning_late,
+        gpu=args.gpu_device,
+        model_name=args.model,
+        model_size=args.model_size,
+        num_classes=len(CIFAR10_CLASSES),
+    )
+
+    for i in range(args.epoch):
+        trainer.train(train_loader)
 
 
 if __name__ == "__main__":

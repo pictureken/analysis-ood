@@ -75,7 +75,7 @@ class PreActResNet(nn.Module):
         return out
 
 
-def ResNet18(k=64, num_classes=10) -> PreActResNet:
+def resnet18(k=64, num_classes=10) -> PreActResNet:
     """Returns a ResNet18 with width parameter k. (k=64 is standard ResNet18)"""
     return PreActResNet(
         PreActBlock, [2, 2, 2, 2], num_classes=num_classes, init_channels=k
