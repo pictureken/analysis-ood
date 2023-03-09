@@ -18,7 +18,7 @@ from tqdm import tqdm
 
 
 class TestTimeAugCIFAR10:
-    base_folder = "cifar-10-batches-py"
+    base_folder = "CIFAR10"
     test_name = "test_batch"
     aug_data_name = "CIFAR10"
     aug_test_name = "test_batch_aug_10"
@@ -89,7 +89,7 @@ class TestTimeAugCIFAR10:
 
 
 class TestTimeAugSVHN(TestTimeAugCIFAR10):
-    base_folder = "svhn-folder"
+    base_folder = "SVHN"
     test_name = "test_32x32.mat"
     aug_data_name = "SVHN"
     aug_test_name = "test_batch_aug_10"
@@ -123,7 +123,7 @@ class TestTimeAugSVHN(TestTimeAugCIFAR10):
 
 
 class TestTimeAugLSUN(TestTimeAugCIFAR10):
-    base_folder = "test_lmdb"
+    base_folder = "LSUN"
     aug_data_name = "LSUN"
     aug_test_name = "test_batch_aug_10"
 
@@ -167,7 +167,7 @@ class TestTimeAugLSUN(TestTimeAugCIFAR10):
 
 
 class TestTimeAugTinyImageNet(TestTimeAugCIFAR10):
-    base_folder = "imagenet_test/images"
+    base_folder = "ImageNet/images"
     aug_data_name = "ImageNet"
     aug_test_name = "test_batch_aug_10"
 
@@ -200,7 +200,7 @@ class TestTimeAugTinyImageNet(TestTimeAugCIFAR10):
 
 
 class TestTimeAugCIFAR10C(TestTimeAugCIFAR10):
-    base_folder = "CIFAR-10-C"
+    base_folder = "CIFAR10-C"
     aug_data_name = "CIFAR10-C"
     aug_test_name = "test_batch_aug_10"
 
