@@ -45,8 +45,7 @@ class TestTimeAugCIFAR10:
                 ]
             )
         else:
-            print("存在しない画像変換手法です")
-            sys.exit(1)
+            sys.exit("存在しない画像変換手法です")
 
     def __getitem__(self, index: int):
         """
@@ -118,8 +117,7 @@ class TestTimeAugSVHN(TestTimeAugCIFAR10):
                 ]
             )
         else:
-            print("存在しない画像変換手法です")
-            sys.exit(1)
+            sys.exit("存在しない画像変換手法です")
 
 
 class TestTimeAugLSUN(TestTimeAugCIFAR10):
@@ -162,8 +160,7 @@ class TestTimeAugLSUN(TestTimeAugCIFAR10):
                 ]
             )
         else:
-            print("存在しない画像変換手法です")
-            sys.exit(1)
+            sys.exit("存在しない画像変換手法です")
 
 
 class TestTimeAugTinyImageNet(TestTimeAugCIFAR10):
@@ -195,8 +192,7 @@ class TestTimeAugTinyImageNet(TestTimeAugCIFAR10):
                 ]
             )
         else:
-            print("存在しない画像変換手法です")
-            sys.exit(1)
+            sys.exit("存在しない画像変換手法です")
 
 
 class TestTimeAugCIFAR10C(TestTimeAugCIFAR10):
