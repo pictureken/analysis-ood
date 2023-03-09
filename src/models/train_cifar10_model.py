@@ -7,6 +7,7 @@ import utils
 def main():
     BASE_FOLDER = "dataset"
     LOAD_FOLDER = "raw"
+    NOISE_LEVEL_LIST = [0, 5, 10, 15, 20]
     MODEL_LIST = ["ResNet18"]
     CIFAR10_CLASSES = [
         "airplane",
@@ -25,12 +26,14 @@ def main():
     parser.add_argument("--train-batch-size", help="", type=int, default=128)
     parser.add_argument("--test-batch-size", help="", type=int, default=100)
     parser.add_argument("--num-workers", help="", type=int, default=2)
-    parser.add_argument("--noise-level", help="", type=int, default=20)
     parser.add_argument("--epoch", help="", type=int, default=4000)
     parser.add_argument("--learning-late", help="", type=int, default=1e-4)
     parser.add_argument("--gpu-device", help="", type=str, default="cuda:0")
     parser.add_argument("--model", help="", choices=MODEL_LIST, default="ResNet18")
     parser.add_argument("--model-size", help="", type=int, default=64)
+    parser.add_argument(
+        "--noise-level", help="", type=int, choices=NOISE_LEVEL_LIST, default=0
+    )
     args = parser.parse_args()
 
     # dataloader
@@ -55,6 +58,7 @@ def main():
 
     for i in range(args.epoch):
         trainer.train(train_loader)
+        trainer.eval(test_loader)
 
 
 if __name__ == "__main__":

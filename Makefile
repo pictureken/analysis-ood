@@ -1,16 +1,24 @@
+#dataset params
 dataset = CIFAR10
 augnum = 10
 transform_method = flip_crop
 corruption_level = 1
 corruption_method = gaussian_noise
 
+#train params
+
+#dataset dir
 DATASET_DIR = dataset/external/${dataset}
 AUG_DATASET_DIR = dataset/processed/${dataset}/test_batch_aug_${augnum}_${transform_method}
+
+#train dir
 
 .PHONY: aug_data
 .PHONY: aug
 
 .PHONY: train
+
+.PHONY: eval
 
 aug_data:
 	make aug transform_method=${transform_method} augnum=${augnum} dataset=CIFAR10 

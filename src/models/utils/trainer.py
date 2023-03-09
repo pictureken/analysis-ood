@@ -48,3 +48,23 @@ class TrainModel:
 
     def eval(self, test_loader):
         self.model.eval()
+        test_loss = 0
+        correct = 0
+        total = 0
+        with torch.no_grad():
+            for batch_idx, (inputs, targets) in tqdm(
+                enumerate(test_loader), total=len(test_loader)
+            ):
+                inputs, targets = inputs.to(self.device), targets.to(self.device)
+                outputs = self.model(inputs)
+                loss = self.criterion(outputs, targets)
+
+                test_loss += loss.item()
+                _, predicted = outputs.max(1)
+                total += targets.size(0)
+                correct += predicted.eq(targets).sum().item()
+            print(
+                "test loss={}, test_error={}".format(
+                    test_loss / (batch_idx + 1), 1 - correct / total
+                )
+            )
