@@ -1,12 +1,14 @@
 import argparse
 import os
 
+import torch
 import utils
 
 
 def main():
     BASE_FOLDER = "dataset"
     LOAD_FOLDER = "raw"
+    MODEL_BASE_FOLDER = "models"
     NOISE_LEVEL_LIST = [0, 5, 10, 15, 20]
     MODEL_LIST = ["ResNet18"]
     TRANSFORM_LIST = ["flip_crop"]
@@ -53,6 +55,14 @@ def main():
         batch_size=args.test_batch_size, num_workers=args.num_workers
     )
 
+    model_setup_path = os.path.join(
+        args.model,
+        "labelnoise" + str(args.noise_level),
+        args.transform_method,
+        "width" + str(args.model_size) + ".pt",
+    )
+    output_path = os.path.join(".", MODEL_BASE_FOLDER, model_setup_path)
+
     trainer = utils.trainer.TrainModel(
         lr=args.learning_late,
         gpu=args.gpu_device,
@@ -61,9 +71,11 @@ def main():
         num_classes=len(CIFAR10_CLASSES),
     )
 
+    # training
     for i in range(args.epoch):
-        trainer.train(train_loader)
+        model = trainer.train(train_loader)
         trainer.eval(test_loader)
+    torch.save(model.state_dict(), output_path)
 
 
 if __name__ == "__main__":

@@ -25,17 +25,10 @@ AUG_DATASET_DIR = dataset/processed/${dataset}/test_batch_aug_${augnum}_${transf
 CIFAR10_DATASET_DIR = dataset/raw/cifar-10-batches-py
 PRE_TRAINED_MODEL_DIR = models/${model}/labelnoise${noise_level}/${train_transform_method}/*${model_size}.pt
 
-#dataset phony
-.PHONY: aug_data
-.PHONY: aug
-
-#cifar10 train phony
-.PHONY: model_wise
-.PHONY: train
-
-.PHONY: eval
 
 # generate aug dataset
+.PHONY: aug_data
+.PHONY: aug
 aug_data:
 	make aug transform_method=${transform_method} augnum=${augnum} dataset=CIFAR10 
 	make aug transform_method=${transform_method} augnum=${augnum} dataset=CIFAR10-C
@@ -54,6 +47,10 @@ ${AUG_DATASET_DIR}: ${DATASET_DIR}
 	--corruption-method ${corruption_method} \
 
 # model wise train
+# デフォルトだとResNetのwidthを1~64まで変化させ4000エポックずつ学習する
+# 出力は64個の学習済みモデルとなる
+.PHONY: model_wise
+.PHONY: train
 model_wise:
 	make models/${model}/labelnoise${noise_level}/${train_transform_method}
 	@for i in {1..64}; do make train model_size=$$i; done

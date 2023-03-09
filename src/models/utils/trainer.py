@@ -46,6 +46,8 @@ class TrainModel:
             )
         )
 
+        return self.model
+
     def eval(self, test_loader):
         self.model.eval()
         test_loss = 0
