@@ -103,5 +103,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# dataset
+dataset
 #.DS_Store
 .DS_Store
