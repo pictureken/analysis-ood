@@ -59,7 +59,7 @@ def main():
         args.model,
         "labelnoise" + str(args.noise_level),
         args.transform_method,
-        "width" + str(args.model_size) + ".pt",
+        "modelsize" + str(args.model_size) + ".pt",
     )
     output_path = os.path.join(".", MODEL_BASE_FOLDER, model_setup_path)
 
