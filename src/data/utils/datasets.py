@@ -244,13 +244,3 @@ class TestTimeAugCIFAR10C(TestTimeAugCIFAR10):
             )
         else:
             sys.exit("存在しない画像変換手法です")
-
-
-if __name__ == "__main__":
-    aug = TestTimeAugCIFAR10C(
-        root="./dataset/external",
-        transform_name="flip_crop",
-        corruption_name="gaussian_noise",
-        corruption_level=1,
-    )
-    aug.aug("./dataset/processed", aug_num=10)
