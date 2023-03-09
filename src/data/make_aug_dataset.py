@@ -78,7 +78,7 @@ def main():
         )
         test_dataset.aug(root=output_path, aug_num=args.augnum)
     else:
-        sys.exit(1)
+        sys.exit("存在しないデータセットです")
 
 
 if __name__ == "__main__":

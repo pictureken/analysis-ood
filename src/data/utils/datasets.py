@@ -247,8 +247,7 @@ class TestTimeAugCIFAR10C(TestTimeAugCIFAR10):
                 ]
             )
         else:
-            print("存在しない画像変換手法です")
-            sys.exit(1)
+            sys.exit("存在しない画像変換手法です")
 
 
 if __name__ == "__main__":
