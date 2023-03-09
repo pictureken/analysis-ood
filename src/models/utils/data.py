@@ -1,3 +1,5 @@
+import sys
+
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -8,15 +10,20 @@ class CIFAR10Loader:
     def __init__(self, root: str) -> None:
         self.root = root
 
-    def train(self, batch_size: int, num_workers: int, noise_level: int):
+    def train(
+        self, batch_size: int, num_workers: int, noise_level: int, transform_method: str
+    ):
 
-        transform = transforms.Compose(
-            [
-                transforms.RandomHorizontalFlip(),
-                transforms.RandomResizedCrop((32, 32)),
-                transforms.ToTensor(),
-            ]
-        )
+        if transform_method == "flip_crop":
+            transform = transforms.Compose(
+                [
+                    transforms.RandomHorizontalFlip(),
+                    transforms.RandomResizedCrop((32, 32)),
+                    transforms.ToTensor(),
+                ]
+            )
+        else:
+            sys.exit("存在しない画像変換手法です")
 
         train_dataset = torchvision.datasets.CIFAR10(
             root=self.root, train=True, transform=transform, download=True

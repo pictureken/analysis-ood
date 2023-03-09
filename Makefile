@@ -30,7 +30,7 @@ PRE_TRAINED_MODEL_DIR = models/${model}/labelnoise${noise_level}/${train_transfo
 .PHONY: aug
 
 #cifar10 train phony
-.PHONY: model
+.PHONY: model_wise
 .PHONY: train
 
 .PHONY: eval
@@ -53,10 +53,10 @@ ${AUG_DATASET_DIR}: ${DATASET_DIR}
 	--corruption-level ${corruption_level} \
 	--corruption-method ${corruption_method} \
 
-# train
-model:
+# model wise train
+model_wise:
 	make models/${model}/labelnoise${noise_level}/${train_transform_method}
-	@for i in {1..5}; do make train model_size=$$i; done
+	@for i in {1..64}; do make train model_size=$$i; done
 
 models/${model}/labelnoise${noise_level}/${train_transform_method}:
 	mkdir -p models/${model}/labelnoise${noise_level}/${train_transform_method}
@@ -74,3 +74,4 @@ ${PRE_TRAINED_MODEL_DIR}: ${CIFAR10_DATASET_DIR}
 	--model ${model} \
 	--model-size ${model_size} \
 	--noise-level ${noise_level} \
+	--transform-method ${train_transform_method} \
