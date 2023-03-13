@@ -107,5 +107,6 @@ venv.bak/
 dataset
 # outputs
 models
+logs
 #.DS_Store
 .DS_Store
