@@ -3,6 +3,7 @@ import sys
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import utils
 from tqdm import tqdm
 
@@ -17,13 +18,16 @@ class TrainModel:
             self.model = utils.resnet.resnet18(k=model_size, num_classes=num_classes)
         else:
             sys.exit("存在しないモデルです")
+        self.num_classes = num_classes
         self.device = torch.device(gpu if torch.cuda.is_available() else "cpu")
         self.criterion = nn.CrossEntropyLoss()
+        self.mse = nn.MSELoss()
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr)
 
     def train(self, train_loader):
         self.model.train()
         train_loss = 0
+        train_error = 0
         correct = 0
         total = 0
         for batch_idx, (inputs, targets) in tqdm(
@@ -33,24 +37,30 @@ class TrainModel:
             self.optimizer.zero_grad()
             outputs = self.model(inputs)
             loss = self.criterion(outputs, targets)
+            outputs = F.softmax(outputs, dim=1)
+            targets_onehot = torch.eye(self.num_classes)[targets]
+            error = self.mse(outputs, targets_onehot)
             loss.backward()
             self.optimizer.step()
 
             train_loss += loss.item()
+            train_error += error.item()
             _, predicted = outputs.max(1)
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
-        print(
-            "train loss={}, train_error={}".format(
-                train_loss / (batch_idx + 1), 1 - correct / total
-            )
-        )
+        train_accuracy = correct / total
 
-        return self.model
+        return (
+            train_loss / (batch_idx + 1),
+            train_error / (batch_idx + 1),
+            train_accuracy,
+            self.model,
+        )
 
     def eval(self, test_loader):
         self.model.eval()
         test_loss = 0
+        test_error = 0
         correct = 0
         total = 0
         with torch.no_grad():
@@ -60,13 +70,14 @@ class TrainModel:
                 inputs, targets = inputs.to(self.device), targets.to(self.device)
                 outputs = self.model(inputs)
                 loss = self.criterion(outputs, targets)
-
+                outputs = F.softmax(outputs, dim=1)
+                targets_onehot = torch.eye(self.num_classes)[targets]
+                error = self.mse(outputs, targets_onehot)
                 test_loss += loss.item()
+                test_error += error.item()
                 _, predicted = outputs.max(1)
                 total += targets.size(0)
                 correct += predicted.eq(targets).sum().item()
-            print(
-                "test loss={}, test_error={}".format(
-                    test_loss / (batch_idx + 1), 1 - correct / total
-                )
-            )
+            test_accuracy = correct / total
+
+        return test_loss / (batch_idx + 1), test_error / (batch_idx + 1), test_accuracy

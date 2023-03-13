@@ -1,4 +1,5 @@
 import argparse
+import datetime
 import os
 
 import torch
@@ -9,6 +10,7 @@ def main():
     BASE_FOLDER = "dataset"
     LOAD_FOLDER = "raw"
     MODEL_BASE_FOLDER = "models"
+    CSV_BASE_FOLDER = "logs"
     NOISE_LEVEL_LIST = [0, 5, 10, 15, 20]
     MODEL_LIST = ["ResNet18"]
     TRANSFORM_LIST = ["flip_crop"]
@@ -59,10 +61,10 @@ def main():
         args.model,
         "labelnoise" + str(args.noise_level),
         args.transform_method,
-        "modelsize" + str(args.model_size) + ".pt",
+        "modelsize" + str(args.model_size),
     )
-    output_path = os.path.join(".", MODEL_BASE_FOLDER, model_setup_path)
 
+    output_model_path = os.path.join(".", MODEL_BASE_FOLDER, model_setup_path + ".pt")
     trainer = utils.trainer.TrainModel(
         lr=args.learning_late,
         gpu=args.gpu_device,
@@ -71,11 +73,43 @@ def main():
         num_classes=len(CIFAR10_CLASSES),
     )
 
+    output_csv_path = os.path.join(".", CSV_BASE_FOLDER, model_setup_path)
+
+    train_loss_csv = utils.csvlog.CSVLogSave(
+        root=output_csv_path, key_name="train_loss"
+    )
+    train_error_csv = utils.csvlog.CSVLogSave(
+        root=output_csv_path, key_name="train_error"
+    )
+    train_accuracy_csv = utils.csvlog.CSVLogSave(
+        root=output_csv_path, key_name="train_accuracy"
+    )
+
+    test_loss_csv = utils.csvlog.CSVLogSave(root=output_csv_path, key_name="test_loss")
+    test_error_csv = utils.csvlog.CSVLogSave(
+        root=output_csv_path, key_name="test_error"
+    )
+    test_accuracy_csv = utils.csvlog.CSVLogSave(
+        root=output_csv_path, key_name="test_accuracy"
+    )
+
     # training
     for i in range(args.epoch):
-        model = trainer.train(train_loader)
-        trainer.eval(test_loader)
-    torch.save(model.state_dict(), output_path)
+        epoch = i + 1
+        train_loss, train_error, train_accuracy, model = trainer.train(train_loader)
+        test_loss, test_error, test_accuracy = trainer.eval(test_loader)
+
+        # 現在時刻
+        time_now = datetime.datetime.now()
+        # csvにlogを出力
+        train_loss_csv.save(value=train_loss, timestamp=time_now, step=epoch)
+        train_error_csv.save(value=train_error, timestamp=time_now, step=epoch)
+        train_accuracy_csv.save(value=train_accuracy, timestamp=time_now, step=epoch)
+        test_loss_csv.save(value=test_loss, timestamp=time_now, step=epoch)
+        test_error_csv.save(value=test_error, timestamp=time_now, step=epoch)
+        test_accuracy_csv.save(value=test_accuracy, timestamp=time_now, step=epoch)
+
+    torch.save(model.state_dict(), output_model_path)
 
 
 if __name__ == "__main__":
