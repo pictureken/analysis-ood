@@ -75,21 +75,21 @@ def main():
 
     output_csv_path = os.path.join(".", CSV_BASE_FOLDER, model_setup_path)
 
-    train_loss_csv = utils.csvlog.CSVLogSave(
+    train_loss_csv = utils.record.CSVLogSave(
         root=output_csv_path, key_name="train_loss"
     )
-    train_error_csv = utils.csvlog.CSVLogSave(
+    train_error_csv = utils.record.CSVLogSave(
         root=output_csv_path, key_name="train_error"
     )
-    train_accuracy_csv = utils.csvlog.CSVLogSave(
+    train_accuracy_csv = utils.record.CSVLogSave(
         root=output_csv_path, key_name="train_accuracy"
     )
 
-    test_loss_csv = utils.csvlog.CSVLogSave(root=output_csv_path, key_name="test_loss")
-    test_error_csv = utils.csvlog.CSVLogSave(
+    test_loss_csv = utils.record.CSVLogSave(root=output_csv_path, key_name="test_loss")
+    test_error_csv = utils.record.CSVLogSave(
         root=output_csv_path, key_name="test_error"
     )
-    test_accuracy_csv = utils.csvlog.CSVLogSave(
+    test_accuracy_csv = utils.record.CSVLogSave(
         root=output_csv_path, key_name="test_accuracy"
     )
 
