@@ -55,6 +55,7 @@ model_wise:
 	make models/${model}/labelnoise${noise_level}/${train_transform_method}
 	@for i in {1..64}; do make train model_size=$$i; done
 
+# 指定条件フォルダの生成
 models/${model}/labelnoise${noise_level}/${train_transform_method}:
 	mkdir -p models/${model}/labelnoise${noise_level}/${train_transform_method}
 
